@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+.simpleBtn{
+    @apply flex items-center px-4 py-2 text-sm font-medium text-amber-900 bg-amber-100 border border-amber-300 rounded-md shadow-sm hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors duration-200;
+}
+
+.btn{
+  @apply cursor-pointer flex items-center justify-center px-4 py-2 rounded-full font-medium text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+/* Primary button (like "New Invoice" in the image) */
+.btn-primary {
+  @apply bg-purple-500 text-white hover:bg-purple-600 focus:ring-purple-500;
+}
+
+/* Success button (for Submit, similar to "Paid" status) */
+.btn-success {
+  @apply bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500;
+}
+
+/* Info button (for Update) */
+.btn-info {
+  @apply bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500;
+}
+
+/* Warning button (like "Pending" status) */
+.btn-warning {
+  @apply bg-amber-500 text-white hover:bg-amber-600 focus:ring-amber-500;
+}
+
+/* Danger button (for Delete) */
+.btn-danger {
+  @apply bg-red-500 text-white hover:bg-red-600 focus:ring-red-500;
+}
+
+/* Secondary button (for GoBack) */
+.btn-secondary {
+  @apply bg-gray-400 text-gray-700 hover:bg-gray-300 focus:ring-gray-400;
+}
+
+/* Auth buttons (Login/Logout) */
+.btn-auth {
+  @apply bg-indigo-500 text-white hover:bg-indigo-600 focus:ring-indigo-500;
+}
+
+/* Button with icon */
+.btn-icon {
+  @apply flex items-center;
+}
+.btn-icon svg {
+  @apply h-5 w-5 mr-2;
+}
+
+/* Small button variant */
+.btn-sm {
+  @apply px-3 py-1 text-xs;
+}
+
+/* Large button variant */
+.btn-lg {
+  @apply px-6 py-3 text-base;
+}
+
+/* Draft status style (for reference) */
+.btn-draft {
+  @apply bg-gray-700 text-white hover:bg-gray-800 focus:ring-gray-700;
+}
+
+.customInput {
+  @apply bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-200;
+}
+
+.customInput-label {
+  @apply block text-sm font-medium text-gray-500 mb-1 text-left;
+}
+
+/* Exit/Close button style */
+.customBtn-exit {
+  @apply flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 px-0;
+}
+
+/* Smaller variant */
+.customBtn-exit-sm {
+  @apply w-6 h-6 text-[12px];
+}
