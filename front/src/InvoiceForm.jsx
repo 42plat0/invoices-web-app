@@ -10,6 +10,8 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
     const [error, setError] = useState(null);
     const nav = useNavigate();
 
+    const apiInvoiceUrl = import.meta.env.VITE_API_URL;
+
     // const sendData = async(data) => {
     //     try {
     //         await axios.post(import.meta.env.VITE_API_URL, data);
@@ -23,7 +25,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.put(import.meta.env.VITE_API_URL + "/" + invoice.id, data);
+            const res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data);
 
             if (res.status === 200){
                 submitCompleted();
@@ -37,7 +39,16 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
     const deleteInvoice = async (data) => {
         try {
-        } catch (error) {}
+            const res = await axios.delete(apiInvoiceUrl + "/" + invoice.id);
+
+            if (res.status === 200){
+                submitCompleted();
+                goHomeHandler();
+            }
+        } catch (error) {
+            setError(error);
+        }
+
     };
 
     const goHomeHandler = () => nav("/");

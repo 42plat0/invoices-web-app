@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async(req, res) => {
     try {
         const {id} = req.params;
-        const deletedinvoice = await deleteinvoice(id);
+        const deletedinvoice = await deleteInvoice(id);
 
         res.status(200).json({status: "success", deleted: deletedinvoice ? "deleted" : "not deleted"});
         
