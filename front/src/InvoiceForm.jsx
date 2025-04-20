@@ -6,22 +6,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 export default function InvoiceForm({ invoice, submitCompleted }) {
-    const { register, handleSubmit, setValue, reset } = useForm();
+    const { register, handleSubmit, setValue, reset } = useForm({
+        defaultValues: {
+            due_at: invoice?.due_at ? getDateStr(invoice.due_at) : "",
+        },
+    });
     const [error, setError] = useState(null);
     const nav = useNavigate();
 
     const apiInvoiceUrl = import.meta.env.VITE_API_URL;
-
-    // const sendData = async(data) => {
-    //     try {
-    //         await axios.post(import.meta.env.VITE_API_URL, data);
-    //         reset();
-    //         nav("/ticket");
-
-    //     } catch (error) {
-    //         setError(error);
-    //     }
-    // }
 
     const sendForm = async (data) => {
         try {
@@ -29,6 +22,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
             if (invoice){
                 res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data);
+                console.log(res)
             }else{
                 res = await axios.post(apiInvoiceUrl, data);
             }
@@ -59,10 +53,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
     const goHomeHandler = () => nav("/");
 
-    if (invoice) {
-        invoice.due_at = getDateStr(invoice.due_at);
-        setValue("status", invoice.status);
-    }
 
     return (
         <div className="flex flex-col w-fit justify-center bg-white text-center p-5">
@@ -103,12 +93,12 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                 <div className="flex gap-3">
                     <div className="flex flex-col">
                         {/* Select */}
-                        <label htmlFor="status" class="customInput-label">
+                        <label htmlFor="status" className="customInput-label">
                             Invoice Status
                         </label>
                         <select
                             id="status"
-                            class="customInput customInput-select"
+                            className="customInput customInput-select"
                             {...register("status", {
                                 required: "Status is required",
                             })}
@@ -124,7 +114,8 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         </label>
                         <input
                             type="date"
-                            value={invoice ? invoice.due_at : "2024-03-24"}
+                            min="1990-01-01"
+                            max="2099-12-31"
                             className="customInput"
                             {...register("due_at", {
                                 required: "Due at is required",

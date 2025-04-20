@@ -24,9 +24,8 @@ export default function Invoices({ invoices, setInvoice }) {
                 <div>
                     <h1 className="font-extrabold text-2xl">Invoices</h1>
                     <p>
-                        There are{" "}
-                        {invoiceList ? "no" : `${invoiceList.length} total`}{" "}
-                        invoices{" "}
+                        There are
+                        {` ${invoiceList.length} total`} invoices
                     </p>
                 </div>
                 <div className="flex items-center">

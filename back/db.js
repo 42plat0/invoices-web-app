@@ -91,7 +91,7 @@ export const deleteInvoice = async (invoiceId) => {
 //------------ UPDATE---------------------
 export const updateInvoice = async (invoiceId, invoice) => {
     let keys = Object.keys(invoice);
-    keys = keys.filter((k) => k !== "due_at" && k !== "id" && k !== "created_at")
+    keys = keys.filter((k) => k !== "id" && k !== "created_at")
 
     const [updatedInvoice] = await db`
         UPDATE invoices 
