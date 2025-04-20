@@ -4,7 +4,7 @@ import "dotenv/config";
 import {db, testDbConnection} from "./db.js";
 import router from "./routes.js";
 import cors from "cors";
-import {CookieParser} from "cookieparser";
+import CookieParser from "cookie-parser";
 
 const app = express();
 
