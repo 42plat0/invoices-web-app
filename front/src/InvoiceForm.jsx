@@ -25,7 +25,13 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data);
+            let res;
+
+            if (invoice){
+                res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data);
+            }else{
+                res = await axios.post(apiInvoiceUrl, data);
+            }
 
             if (res.status === 200){
                 submitCompleted();
@@ -107,11 +113,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                                 required: "Status is required",
                             })}
                         >
-                            {!invoice && (
-                                <option selected disabled>
-                                    --
-                                </option>
-                            )}
                             <option value="draft">Draft</option>
                             <option value="pending">Pending</option>
                             <option value="paid">Paid</option>
@@ -123,7 +124,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         </label>
                         <input
                             type="date"
-                            value={invoice ? invoice.due_at : ""}
+                            value={invoice ? invoice.due_at : "2024-03-24"}
                             className="customInput"
                             {...register("due_at", {
                                 required: "Due at is required",

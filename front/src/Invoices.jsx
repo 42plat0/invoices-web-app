@@ -1,14 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import Invoice from "./Invoice";
 
 export default function Invoices({ invoices, setInvoice }) {
     // Add error handling
     const [error, setError] = useState(null);
     const invoiceList = invoices;
+    const nav = useNavigate();
+
+    const apiInvoiceUrl = import.meta.env.VITE_API_URL;
+
+    const handleNewInvoiceClick = () => {
+        try {
+            nav("/invoice/add");
+        } catch (error) {
+            setError(error);
+        }
+    };
 
     return (
-        <main className="w-4/5 flex flex-col">
-            <nav className="text-white flex justify-between">
+        <main className="w-4/5 flex flex-col gap-5">
+            <nav className="text-white flex justify-between py-5">
                 <div>
                     <h1 className="font-extrabold text-2xl">Invoices</h1>
                     <p>
@@ -26,7 +38,10 @@ export default function Invoices({ invoices, setInvoice }) {
                         </select>
                     </div>
                     {/* TODO change to module button downloaded from internet */}
-                    <button className="text-white bg-purple-600 rounded-3xl p-5 text-xl">
+                    <button
+                        className="text-white bg-purple-600 rounded-3xl p-5 text-xl cursor-pointer"
+                        onClick={handleNewInvoiceClick}
+                    >
                         <span className="bg-white text-purple-600 px-3 py-1 text-2xl font-bold rounded-4xl cursor-pointer mr-3">
                             +
                         </span>

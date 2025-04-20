@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .invoice-card{
-    @apply text-white items-center justify-between bg-[#1f203c] p-6 mb-4 rounded-lg flex w-2/3;
+    @apply text-white items-center justify-between bg-[#1f203c] p-6 mb-4 rounded-lg flex w-1/1;
 }
 
 #clientNameField:disabled{

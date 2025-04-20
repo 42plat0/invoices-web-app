@@ -34,7 +34,10 @@ function App() {
     {invoices &&
       <Routes>
         <Route index element={<Invoices invoices={invoices} setInvoice={setInvoice}/>}/>
-        <Route path="/invoice" element={<InvoiceForm invoice={invoice} submitCompleted={handleSuccessfulRequest}/>} />
+        <Route path="/invoice" >
+            <Route index element={<InvoiceForm invoice={invoice} submitCompleted={handleSuccessfulRequest}/>}  />
+            <Route path="add" element={<InvoiceForm invoice={null} submitCompleted={handleSuccessfulRequest}/>} />
+        </Route>
       </Routes>
     } 
   </>)
