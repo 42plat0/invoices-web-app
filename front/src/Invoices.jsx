@@ -18,8 +18,36 @@ export default function Invoices({ invoices, setInvoice }) {
         }
     };
 
+    const handleUserLogin = () => {
+        try {
+            nav("/auth/login");
+        } catch (error) {
+            setError(error);
+        }
+    };
+
+    const handleUserRegister = () => {
+        try {
+            nav("/auth/register");
+        } catch (error) {
+            setError(error);
+        }
+    };
+
     return (
         <main className="w-4/5 flex flex-col gap-5">
+            <div className="flex">
+                <button className="btn btn-auth "
+                   onClick={handleUserLogin} 
+                >
+                    Login
+                </button>
+                <button className="btn btn-auth"
+                    onClick={handleUserRegister} 
+                >
+                    Register
+                </button>
+            </div>
             <nav className="text-white flex justify-between py-5">
                 <div>
                     <h1 className="font-extrabold text-2xl">Invoices</h1>

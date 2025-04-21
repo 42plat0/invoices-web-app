@@ -3,6 +3,8 @@ import InvoiceForm from './InvoiceForm'
 import { useEffect, useState } from "react"
 import { Route, Routes } from 'react-router'
 import axios from "axios";
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
 
 function App() {
     // TODO scramble id up as it's used for paths
@@ -37,6 +39,10 @@ function App() {
         <Route path="/invoice" >
             <Route index element={<InvoiceForm invoice={invoice} submitCompleted={handleSuccessfulRequest}/>}  />
             <Route path="add" element={<InvoiceForm invoice={null} submitCompleted={handleSuccessfulRequest}/>} />
+        </Route>
+        <Route path="/auth">
+            <Route path="login" element={<LoginForm submitCompleted={handleSuccessfulRequest} /> }></Route>  
+            <Route path="register" element={<RegisterForm submitCompleted={handleSuccessfulRequest} /> }></Route>  
         </Route>
       </Routes>
     } 
