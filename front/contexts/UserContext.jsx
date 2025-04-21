@@ -1,0 +1,31 @@
+import { createContext, useState, useEffect } from "react";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_AUTH_API_URL;
+
+export const UserContext = createContext();
+
+export const UserContextProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchuser = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/me`, {
+          withCredentials: true,
+        });
+        setUser(response.data.user);
+      } catch (error) {
+        setUser(null);
+        console.error(error);
+      }
+    };
+    fetchuser();
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext, use } from "react";
+import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router";
 import Invoice from "./Invoice";
 
@@ -6,6 +7,8 @@ export default function Invoices({ invoices, setInvoice }) {
     // Add error handling
     const [error, setError] = useState(null);
     const invoiceList = invoices;
+    const {user, setUser} = useContext(UserContext);
+
     const nav = useNavigate();
 
     const apiInvoiceUrl = import.meta.env.VITE_API_URL;
@@ -37,16 +40,37 @@ export default function Invoices({ invoices, setInvoice }) {
     return (
         <main className="w-4/5 flex flex-col gap-5">
             <div className="flex">
-                <button className="btn btn-auth "
-                   onClick={handleUserLogin} 
-                >
-                    Login
-                </button>
-                <button className="btn btn-auth"
-                    onClick={handleUserRegister} 
-                >
-                    Register
-                </button>
+                {
+                    !user && (
+                        <>
+                            <button className="btn btn-auth "
+                            onClick={handleUserLogin} 
+                            >
+                                Login
+                            </button>
+                            <button className="btn btn-auth"
+                                onClick={handleUserRegister} 
+                            >
+                                Register
+                            </button>
+                        </>
+                    )
+                }
+                {
+                    user && (
+                        <div className="flex gap-5">
+                            <p className="text-white">Welcome {user.username}</p>
+                            <button className="btn btn-auth"
+                                onClick={() => {
+                                    setUser(null);
+                                    nav("/");
+                                }} 
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )
+                }
             </div>
             <nav className="text-white flex justify-between py-5">
                 <div>

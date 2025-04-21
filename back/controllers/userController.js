@@ -28,10 +28,11 @@ userController.post("/login", async (req, res) => {
             res.status(400).json({ status: "failed", error: "Incorrect pw" });
             return;
         }
+        delete(dbUser.password_hash);
 
         const token = createCookie(user.id);
         setCookie(token, res);
-        res.status(200).json({ status: "success" });
+        res.status(200).json({ status: "success", user: dbUser});
     } catch (error) {
         console.error(error);
     }
@@ -60,5 +61,13 @@ userController.post("/logout", async (req, res) => {
         console.error(error);
     }
 });
+
+userController.get("/me", async (req, res) => {
+    try {
+        res.status(200).json({ status: "success", user: req.user }); 
+    } catch (error) {
+        console.error(error);
+    }
+})
 
 export default userController;

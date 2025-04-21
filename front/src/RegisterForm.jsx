@@ -9,11 +9,11 @@ export default function RegisterForm({ submitCompleted }) {
     const [error, setError] = useState(null);
     const nav = useNavigate();
 
-    const authUrl = import.meta.env.VITE_AUTH_REGISTER_API_URL;
+    const API_URL = import.meta.env.VITE_AUTH_API_URL;
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.post(authUrl, data);
+            const res = await axios.post(`${API_URL}/auth/register`, data);
 
             if (res.status === 200){
                 submitCompleted();

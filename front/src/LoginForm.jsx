@@ -2,20 +2,23 @@ import { useForm } from "react-hook-form";
 import "./static/app.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 
 export default function LoginForm({ submitCompleted }) {
     const { register, handleSubmit, setValue, reset } = useForm();
-    const [error, setError] = useState(null);
+    const [ error, setError ] = useState(null);
+    const { user, setUser } = useContext(UserContext);
     const nav = useNavigate();
     
-    const authUrl = import.meta.env.VITE_AUTH_LOGIN_API_URL;
+    const API_URL = import.meta.env.VITE_AUTH_API_URL;
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.post(authUrl, data);
+            const res = await axios.post(`${API_URL}/login`, data);
 
             if (res.status === 200){
+                setUser(res.data.user);
                 submitCompleted();
                 goHomeHandler();
                 
