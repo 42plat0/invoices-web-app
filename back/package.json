@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cookieparser": "^0.1.0",
     "cors": "^2.8.5",
@@ -20,6 +21,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-token": "^1.0.9",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "sequelize": "^6.37.7"
   }
 }

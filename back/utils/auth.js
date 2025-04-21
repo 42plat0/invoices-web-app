@@ -7,7 +7,7 @@ export const createCookie = (id) => {
 };
 
 export const setCookie = (cookie, res) => {
-    res?.cookie(authCookieName, cookie, { expires: 900000, httpOnly: true });
+    res?.cookie(authCookieName, cookie, { maxAge: 900000, httpOnly: true });
 };
 
 export const clearCookie = (res) => res.clearCookie(authCookieName);

@@ -5,13 +5,11 @@ import {
     deleteInvoice,
     fetchInvoice,
     updateInvoice,
-    fetchColumns,
-} from "./db.js";
-import { createCookie, setCookie, clearCookie, isCookieValid } from "./auth.js";
+} from "../models/invoiceModel.js";
 
-const router = express.Router();
+const invoiceController = express.Router();
 
-router.get("/", async (req, res) => {
+invoiceController.get("/", async (req, res) => {
     try {
         const invoices = await fetchInvoices();
 
@@ -24,7 +22,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+invoiceController.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const invoice = await fetchInvoice(id);
@@ -38,7 +36,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
+invoiceController.post("/", async (req, res) => {
     try {
         const invoice = req.body;
         const newinvoice = await insertInvoice(invoice);
@@ -49,7 +47,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+invoiceController.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const deletedinvoice = await deleteInvoice(id);
@@ -63,7 +61,7 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+invoiceController.put("/:id", async (req, res) => {
     try {
         const invoice = req.body,
             { id } = req.params;
@@ -74,4 +72,5 @@ router.put("/:id", async (req, res) => {
         console.error(error);
     }
 });
-export default router;
+
+export default invoiceController;
