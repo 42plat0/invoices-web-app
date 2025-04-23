@@ -1,7 +1,8 @@
-import { useState, useContext, use } from "react";
+import { useState, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router";
 import Invoice from "./Invoice";
+import axios from "axios";
 
 export default function Invoices({ invoices, setInvoice }) {
     // Add error handling
@@ -11,7 +12,7 @@ export default function Invoices({ invoices, setInvoice }) {
 
     const nav = useNavigate();
 
-    const apiInvoiceUrl = import.meta.env.VITE_API_URL;
+    const API_URL = import.meta.env.VITE_AUTH_API_URL;
 
     const handleNewInvoiceClick = () => {
         try {
@@ -37,6 +38,26 @@ export default function Invoices({ invoices, setInvoice }) {
         }
     };
 
+    // TODO probably needs to go elsewhere
+    const handleUserLogout = async () => {
+        try {
+            // need to send something to the back
+            const res = await axios.post(`${API_URL}/logout`, {}, {
+                withCredentials: true,
+            });
+
+            if (res.status === 200){
+                setUser(null);
+                nav("/");
+                window.location.reload(); // I like reloading page
+            }
+        } catch (error) {
+            console.error(error)
+            setError(error);
+        }
+
+    }
+
     return (
         <main className="w-4/5 flex flex-col gap-5">
             <div className="flex">
@@ -59,12 +80,9 @@ export default function Invoices({ invoices, setInvoice }) {
                 {
                     user && (
                         <div className="flex gap-5">
-                            <p className="text-white">Welcome {user.username}</p>
+                            <p className="text-white">Welcome, {user.username}</p>
                             <button className="btn btn-auth"
-                                onClick={() => {
-                                    setUser(null);
-                                    nav("/");
-                                }} 
+                                onClick={handleUserLogout} 
                             >
                                 Logout
                             </button>
