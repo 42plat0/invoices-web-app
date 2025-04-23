@@ -32,6 +32,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
             if (res.status === 200){
                 submitCompleted();
+                window.location.reload();
                 goHomeHandler();
                 
             }

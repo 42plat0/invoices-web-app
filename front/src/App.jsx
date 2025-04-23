@@ -14,7 +14,7 @@ function App() {
 
     useEffect(() => {
         const getInvoices = async() => {
-            const invoices = await axios.get(import.meta.env.VITE_API_URL);
+            const invoices = await axios.get(import.meta.env.VITE_API_URL, {withCredentials:true});
             setInvoices(invoices.data.invoices);
         }
         getInvoices();
