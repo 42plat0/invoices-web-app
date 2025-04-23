@@ -15,7 +15,9 @@ export default function LoginForm({ submitCompleted }) {
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.post(`${API_URL}/login`, data);
+            const res = await axios.post(`${API_URL}/login`, data, {
+                withCredentials: true,
+            });
 
             if (res.status === 200){
                 setUser(res.data.user);
@@ -81,12 +83,9 @@ export default function LoginForm({ submitCompleted }) {
                     />
                 </div>
                 <div className="flex justify-center gap-5">
-                    <input
-                        type="submit"
-                        value="Login"
+                    <button
                         className="btn btn-primary"
-                        onSubmit={sendForm}
-                    />
+                    >Login</button>
                 </div>
             </form>
         </div>

@@ -21,10 +21,13 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
             let res;
 
             if (invoice){
-                res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data);
-                console.log(res)
+                res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data, {
+                    withCredentials: true,
+                });
             }else{
-                res = await axios.post(apiInvoiceUrl, data);
+                res = await axios.post(apiInvoiceUrl, data, {
+                    withCredentials: true,
+                });
             }
 
             if (res.status === 200){
@@ -81,7 +84,8 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
                     <input
                         type="text"
-                        defaultValue={invoice ? invoice.client_name : "..."}
+                        defaultValue={invoice ? invoice.client_name : ""}
+                        placeholder="..."
                         id="clientNameField"
                         disabled={invoice ? true : ""}
                         className="customInput"

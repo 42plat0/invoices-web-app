@@ -10,7 +10,8 @@ import CookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-    origin: process.env.FE_API_URL
+    origin: process.env.FE_API_URL,
+    credentials: true
 }));
 
 app.use(CookieParser());

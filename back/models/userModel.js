@@ -13,12 +13,22 @@ export const createUser = async(user) => {
     return cUser;
 }
 
-export const isUser = async(user) => {
+export const getUserByUsername = async(user) => {
 
     const [isUser] = await db`
-        SELECT id, username, password_hash FROM users
+        SELECT * FROM users
         WHERE username = ${user.username};
     `
 
     return isUser;
+}
+
+export const getUserById = async(id) => {
+
+    const [user] = await db`
+        SELECT id, username FROM users
+        WHERE id = ${id};  
+    `
+
+    return user;
 }

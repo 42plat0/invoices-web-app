@@ -2,15 +2,14 @@ import jwt from "jsonwebtoken";
 
 const authCookieName = "jwt";
 
-export const createCookie = (id) => {
+export const getJWTToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
 };
 
-export const setCookie = (cookie, res) => {
-    res?.cookie(authCookieName, cookie, { maxAge: 900000, httpOnly: true });
+export const addTokenToRes = (token, res) => {
+    res.cookie("token", token, { maxAge: 900000, httpOnly: true, sameSite:"Lax" });
 };
 
-export const clearCookie = (res) => res.clearCookie(authCookieName);
+export const clearToken = (res) => res.clearCookie("token");
 
-export const isCookieValid = (cookie) =>
-    jwt.verify(cookie, process.env.JWT_SECRET_KEY);
+export const decodeToken = (cookie) => jwt.verify(cookie, process.env.JWT_SECRET_KEY);
