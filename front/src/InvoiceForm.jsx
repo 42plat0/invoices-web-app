@@ -32,8 +32,8 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
             if (res.status === 200){
                 submitCompleted();
-                window.location.reload();
                 goHomeHandler();
+                window.location.reload();
                 
             }
         } catch (error) {
@@ -48,6 +48,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
             if (res.status === 200){
                 submitCompleted();
                 goHomeHandler();
+                window.location.reload();
             }
         } catch (error) {
             setError(error);
