@@ -25,16 +25,6 @@ export const testDbConnection = async () => {
 
 async function initTable() {
     await db`
-        CREATE TABLE IF NOT EXISTS invoices (
-            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            client_name TEXT NOT NULL,
-            amount NUMERIC NOT NULL,
-            status TEXT CHECK (status IN ('draft', 'pending', 'paid')) DEFAULT 'draft',
-            created_at TIMESTAMP DEFAULT NOW(),
-            due_at TIMESTAMP NOT NULL
-        );
-    `;
-    await db`
         CREATE TABLE IF NOT EXISTS users(
             id SERIAL PRIMARY KEY,
             username VARCHAR(100) UNIQUE NOT NULL,
@@ -44,4 +34,15 @@ async function initTable() {
         );
     `;
 
+    await db`
+        CREATE TABLE IF NOT EXISTS invoices (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            user_id INT UNIQUE NOT NULL REFERENCES users(id),
+            client_name TEXT NOT NULL,
+            amount NUMERIC NOT NULL,
+            status TEXT CHECK (status IN ('draft', 'pending', 'paid')) DEFAULT 'draft',
+            created_at TIMESTAMP DEFAULT NOW(),
+            due_at TIMESTAMP NOT NULL
+        );
+    `;
 }
