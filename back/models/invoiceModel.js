@@ -2,15 +2,17 @@ import { db } from "../db.js";
 
 //---------------------------------------
 //------------- GET ---------------------
-export const fetchInvoices = async () =>
-    await db`
-        SELECT * FROM invoices; 
-    `;
-
-export const fetchInvoice = async (invoiceId) =>
+export const fetchInvoices = async (userId) =>
     await db`
         SELECT * FROM invoices
-        WHERE id = ${invoiceId}; 
+        WHERE user_id = ${userId}; 
+    `;
+
+export const fetchInvoice = async (invoiceId, userId) =>
+    await db`
+        SELECT * FROM invoices
+        WHERE id = ${invoiceId}
+        AND user_id = ${userId}; 
     `;
 
 // Was gonna use for updates 
@@ -24,7 +26,7 @@ export const fetchColumns = async (tableName) =>
 //---------------------------------------
 //------------ POST ---------------------
 export const insertInvoice = async (invoice) => {
-    const keys = Object.keys(invoice);
+    const keys = Object.keys(invoice);  // Invoice with user_id attached
 
     const [newInvoice] = await db`
         INSERT INTO invoices
@@ -49,14 +51,14 @@ export const deleteInvoice = async (invoiceId) => {
 
 //---------------------------------------
 //------------ UPDATE---------------------
-export const updateInvoice = async (invoiceId, invoice) => {
+export const updateInvoice = async (invoiceId, invoice, userId) => {
     let keys = Object.keys(invoice);
     keys = keys.filter((k) => k !== "id" && k !== "created_at")
 
     const [updatedInvoice] = await db`
         UPDATE invoices 
         SET ${db(invoice, keys)}
-        WHERE id = ${invoiceId}
+        WHERE id = ${invoiceId} AND user_id = ${userId}
         RETURNING *; 
         `;
 

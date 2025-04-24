@@ -32,23 +32,26 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
             if (res.status === 200){
                 submitCompleted();
+                reset();
                 goHomeHandler();
-                window.location.reload();
                 
             }
         } catch (error) {
+            console.error(error)
             setError(error);
         }
     };
 
     const deleteInvoice = async (data) => {
         try {
-            const res = await axios.delete(apiInvoiceUrl + "/" + invoice.id);
+            const res = await axios.delete(apiInvoiceUrl + "/" + invoice.id, {
+                    withCredentials: true,
+            });
 
             if (res.status === 200){
                 submitCompleted();
+                reset();
                 goHomeHandler();
-                window.location.reload();
             }
         } catch (error) {
             setError(error);
@@ -149,7 +152,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         type="submit"
                         value={invoice ? "Update" : "Submit"}
                         className="btn btn-secondary"
-                        onSubmit={sendForm}
                     />
                     <button
                         value="Delete"

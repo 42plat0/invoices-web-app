@@ -3,12 +3,12 @@ import "./static/app.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "./contexts/UserContext";
 
 export default function LoginForm({ submitCompleted }) {
     const { register, handleSubmit, setValue, reset } = useForm();
     const [ error, setError ] = useState(null);
-    const { user, setUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     const nav = useNavigate();
     
     const API_URL = import.meta.env.VITE_AUTH_API_URL;

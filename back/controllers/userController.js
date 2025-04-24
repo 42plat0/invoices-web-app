@@ -66,6 +66,7 @@ userController.post("/logout", async (req, res) => {
 
 userController.get("/me", 
     // Auth middleware
+    // TODO perkelti i izoliuota vieta
     async(req, res, next) => {
         try{
             const tok = req.cookies.token;
@@ -75,7 +76,6 @@ userController.get("/me",
             next();
         } catch(error){
             res.status(400).json({status:"failed", error})
-            return;
         }
 
     },

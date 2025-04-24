@@ -13,11 +13,12 @@ export default function RegisterForm({ submitCompleted }) {
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.post(`${API_URL}/auth/register`, data);
+            const res = await axios.post(`${API_URL}/register`, data);
 
             if (res.status === 200){
                 submitCompleted();
                 goHomeHandler();
+                reset();
                 
             }
         } catch (error) {

@@ -37,7 +37,7 @@ async function initTable() {
     await db`
         CREATE TABLE IF NOT EXISTS invoices (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            user_id INT UNIQUE NOT NULL REFERENCES users(id),
+            user_id INT NOT NULL REFERENCES users(id),
             client_name TEXT NOT NULL,
             amount NUMERIC NOT NULL,
             status TEXT CHECK (status IN ('draft', 'pending', 'paid')) DEFAULT 'draft',
