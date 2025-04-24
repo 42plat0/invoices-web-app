@@ -1,0 +1,40 @@
+
+---------------------------------------------------------------------------
+CURRENT:
+    !#--> Invoice'ai neturi USERIU priskirtu
+        // Reikai sukurti normalu mechanizma, kuriuo prisegamas userio id, tikrinami tokenai kiekviename requeste backui, vadinasi reikia middleware'o. Dabartiis sprendimas yra greitas ir nepalaikomas. Galim turet middleware kur prie jo prisegamas userio id, jei jau tai nera padaryta ir req body pridesim jy. Also, reikia ir parodyti tik tuos invoices, kurie yra userio.
+    #--> [fix] Yra prisijungimo UI, taciau nera validaciju, kad sutampa PW
+    #--> [fix] Invoice status'as visada nusidefaultina i "Draft" (editinant tsg pakeicia). ----??? Or something else... After clicking exit on invoice it saves the "Draft" option even though we don't press save.
+
+DONE:
+    ++++ Pakeisti client name value. Uzdeti placeholderi.
+    ++++ Susijes (Invoice'ai neturi USERIU priskirtu): refreshinus puslapi issitrina vartotojas LOOL.
+        //nepersiduoda cookie? zdz, tsg neranda jo is cookies, nors lyg ir FE lieka jie. JK, pasirodo jie nieslieka FE :D Krc nejasna kaip isvis cia cookies vaiksto. Paziurek svieziom akim :D
+    +++++ Logout doesnt logout
+    +++++ [fix] Padeletinus invoice neatsinaujina sarasas invoice, taciau is tiesu istrina. Perkrovus puslapi manually jie atsiranda. Spejimas: displayina greiciau nei gauna duomenis, t.y. nera patikrinimo ir sulaukimo. Kitas, neateina tsg duomenys. Seems sus paskutinis, bet spejimas. 
+        //easy solution was to reload page, better - add as context a invoice list 
+    
+---------------------------------------------------------------------------
+
+[fix] When first item is clicked, it goes down. Why?
+
+
+[feat] Filter by is nto workign
+
+[feat] There are no authentication UI. Questoinable workign authentiaction, needs testing.
+
+[feat] Panaikinti rodykles prei amount.
+
+[feat] Uzbaigti UI - pagrazinti.
+
+[feat] Modularize if enough time.
+
+[fix] Gali ivesti minusini amounta, nice, kinda confusing tho.
+
+[feat] Add axios interceptor and remove visur withCredentials: true
+
+[feat] Istrinus invoice turetu graziai atsinaujint puslapis. Reiskais, kad reikia tureti invoice'us kaip Contexta kuris kiekviena karta yra atnaujinamas, tada po deletiono rodytu nrml ir nereiketu cheatint su window.location.reload() :D
+
+[feat, important] Admin: Can view and manage all users’ invoices. create roles
+
+[feat] pagination
