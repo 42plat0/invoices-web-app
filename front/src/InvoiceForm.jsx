@@ -60,8 +60,14 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
 
     return (
-        <div className="flex flex-col w-fit justify-center bg-white text-center p-5">
+        <div className="flex flex-col w-fit bg-white text-center p-5 items-end relative">
             {error && <p>error</p>}
+            <button
+                className="btn customBtn-exit customBtn-exit-sm absolute"
+                onClick={goHomeHandler}
+            >
+                ✕
+            </button>
             <form
                 className="flex flex-col text-2xl gap-3"
                 onSubmit={handleSubmit(sendForm)}
@@ -76,12 +82,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                             Client Name
                         </label>
 
-                        <button
-                            className="btn customBtn-exit customBtn-exit-sm"
-                            onClick={goHomeHandler}
-                        >
-                            ✕
-                        </button>
+
                     </div>
 
                     <input
