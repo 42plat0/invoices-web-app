@@ -3,6 +3,12 @@
 .invoice-card{
     @apply text-white items-center justify-between bg-[#1f203c] p-6 mb-4 rounded-lg flex w-1/1;
 }
+.invoice-header {
+    @apply text-gray-300 bg-[#2a2b4d] p-4 rounded-t-lg flex justify-between font-bold uppercase text-sm;
+}
+.invoice-header-item{
+    @apply w-1/5 text-center border-s-1 border-e-1 border-collapse;
+}
 
 #clientNameField:disabled{
     @apply bg-gray-500;

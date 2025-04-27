@@ -1,10 +1,29 @@
 import StatusBadge from "./StatusBadge";
 import "./static/Invoice.css";
 import { useNavigate } from 'react-router';
+import { useContext } from "react";
+import { UserContext } from "./contexts/UserContext";
 
-export default function Invoice({invoice, setInvoice}){
+export default function Invoice({invoice, setInvoice, example=false}){
+
+    const { user } = useContext(UserContext);
+
+    if (example){
+        return( 
+            <div className="invoice-header">
+                <p className="invoice-header-item">Id</p>
+                <p className="invoice-header-item">Due at</p>
+                <p className="invoice-header-item">Client name</p>
+                <p className="invoice-header-item">Amount</p>
+                {user.role === "admin" && <p className="invoice-header-item">Owner</p>}
+                {/* TODO add key */}
+                <p className="invoice-header-item">Status</p>
+            </div>
+        )
+    }
+
     // TODO check invoice object
-    const {id, due_at, client_name, amount, status} = invoice;
+    const {id, due_at, client_name, amount, status, owner} = invoice;
     const nav = useNavigate();
 
     const handleBadgeClick = () => {
@@ -21,6 +40,7 @@ export default function Invoice({invoice, setInvoice}){
             <p className="w-1/5">{formatDueDate(due_at)}</p>
             <p className="w-1/5 capitalize">{client_name}</p>
             <p className="w-1/5 font-bold text-lg text-white">${amount}</p>
+            {user.role === "admin" && <p className="w-1/5">{owner}</p>}
             {/* TODO add key */}
             <StatusBadge status={status} invoiceId={id}/>
 

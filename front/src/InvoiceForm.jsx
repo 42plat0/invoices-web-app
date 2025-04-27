@@ -2,7 +2,9 @@ import { useForm } from "react-hook-form";
 import "./static/app.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useState, useContext } from "react";
+import UserSelector from "./UserSelector";
+import { UserContext } from "./contexts/UserContext";
 
 export default function InvoiceForm({ invoice, submitCompleted }) {
     const {
@@ -17,14 +19,17 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
         },
     });
     const [error, setError] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const {user} = useContext(UserContext);
     const nav = useNavigate();
-
     const apiInvoiceUrl = import.meta.env.VITE_API_URL;
 
     const sendForm = async (data) => {
         try {
             let res;
-
+            console.log(userId)
+            console.log(data)
+            
             if (invoice) {
                 res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data, {
                     withCredentials: true,
@@ -103,6 +108,26 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         <p className="err">{errors.client_name.message}</p>
                     )}
                 </div>
+                {user.role === "admin" && 
+                    <div className="flex flex-col">
+                        <UserSelector onSelectUser={setUserId} defaultValue={invoice ? invoice.user_id : ""} register={
+                            {...register("user_id", {
+                                required: "User is required",
+                            })}
+                         }/>
+                        {/* <select
+                            id="user"
+                        >
+                            <option value="draft">...</option>
+                            {}
+                            <option value="pending">Pending</option>
+                            <option value="paid">Paid</option>
+                        </select> */}
+    
+                    </div>
+
+                }
+
                 <div className="flex gap-3">
                     <div className="flex flex-col">
                         {/* Select */}

@@ -1,4 +1,5 @@
 import postgres from "postgres";
+import { hashPw } from "./utils/hash.js";
 
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$ Configuration $$$$$$$$$
@@ -30,9 +31,21 @@ async function initTable() {
             username VARCHAR(100) UNIQUE NOT NULL,
             email VARCHAR(200) UNIQUE NOT NULL,
             password_hash VARCHAR(100) NOT NULL,
-            created_at TIMESTAMP DEFAULT NOW()
+            created_at TIMESTAMP DEFAULT NOW(),
+            role VARCHAR(20) CHECK (role IN ('admin', 'user')) DEFAULT 'user'
         );
     `;
+
+    const adminPw = await hashPw("admin");
+    await db`
+        INSERT INTO users (username, email, password_hash, role)
+        VALUES(
+            'admin',
+            'admin@admin.com',
+            ${adminPw},
+            'admin'
+        ) ON CONFLICT DO NOTHING;
+    `
 
     await db`
         CREATE TABLE IF NOT EXISTS invoices (

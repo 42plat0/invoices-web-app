@@ -2,10 +2,12 @@ import { db } from "../db.js";
 
 //---------------------------------------
 //------------- GET ---------------------
-export const fetchInvoices = async (userId) =>
+export const fetchInvoices = async (userId=null) =>
     await db`
-        SELECT * FROM invoices
-        WHERE user_id = ${userId}; 
+        SELECT * FROM invoices i
+        ${userId 
+            ? db`WHERE user_id=${userId}` 
+            : db``}
     `;
 
 export const fetchInvoice = async (invoiceId, userId) =>
@@ -51,14 +53,14 @@ export const deleteInvoice = async (invoiceId) => {
 
 //---------------------------------------
 //------------ UPDATE---------------------
-export const updateInvoice = async (invoiceId, invoice, userId) => {
+export const updateInvoice = async (invoiceId, invoice) => {
     let keys = Object.keys(invoice);
     keys = keys.filter((k) => k !== "id" && k !== "created_at")
 
     const [updatedInvoice] = await db`
         UPDATE invoices 
         SET ${db(invoice, keys)}
-        WHERE id = ${invoiceId} AND user_id = ${userId}
+        WHERE id = ${invoiceId}
         RETURNING *; 
         `;
 

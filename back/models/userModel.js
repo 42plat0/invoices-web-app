@@ -25,9 +25,13 @@ export const getUserByUsername = async(user) => {
 export const getUserById = async(id) => {
 
     const [user] = await db`
-        SELECT id, username FROM users
+        SELECT id, username, role FROM users
         WHERE id = ${id};  
     `
 
     return user;
 }
+
+export const getUsers = async() => 
+    await db `SELECT id, username FROM users`
+    

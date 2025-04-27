@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createUser, getUserById, getUserByUsername } from "../models/userModel.js";
+import { createUser, getUserById, getUserByUsername, getUsers } from "../models/userModel.js";
 import { hashPw, isCorrPw } from "../utils/hash.js";
 
 import {
@@ -9,6 +9,8 @@ import {
     clearToken,
     decodeToken,
 } from "../utils/auth.js";
+import { protect } from "../utils/pathProtectMW.js";
+import { allowedTo } from "../utils/validators/roleCheckMW.js";
 
 const userController = express.Router();
 
@@ -80,10 +82,21 @@ userController.get("/me",
             res.status(400).json({status:"failed", error})
         }
 
-    },
+    }, protect, allowedTo("admin", "user"),
     async (req, res) => {
         try {
             res.status(200).json({ status: "success", user: req.user }); 
+        } catch (error) {
+            console.error(error);
+        }
+    }
+)
+
+userController.get("/all", protect, allowedTo("admin"),
+    async (req, res) => {
+        try {
+            const users = await getUsers();
+            res.status(200).json({ status: "success", users }); 
         } catch (error) {
             console.error(error);
         }
