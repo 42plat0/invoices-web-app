@@ -3,10 +3,15 @@ import "./static/app.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
 
 export default function InvoiceForm({ invoice, submitCompleted }) {
-    const { register, handleSubmit, setValue, reset } = useForm({
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        reset,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             due_at: invoice?.due_at ? getDateStr(invoice.due_at) : "",
         },
@@ -20,24 +25,23 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
         try {
             let res;
 
-            if (invoice){
+            if (invoice) {
                 res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data, {
                     withCredentials: true,
                 });
-            }else{
+            } else {
                 res = await axios.post(apiInvoiceUrl, data, {
                     withCredentials: true,
                 });
             }
 
-            if (res.status === 200){
+            if (res.status === 200) {
                 submitCompleted();
                 reset();
                 goHomeHandler();
-                
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
             setError(error);
         }
     };
@@ -45,10 +49,10 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
     const deleteInvoice = async (data) => {
         try {
             const res = await axios.delete(apiInvoiceUrl + "/" + invoice.id, {
-                    withCredentials: true,
+                withCredentials: true,
             });
 
-            if (res.status === 200){
+            if (res.status === 200) {
                 submitCompleted();
                 reset();
                 goHomeHandler();
@@ -56,11 +60,9 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
         } catch (error) {
             setError(error);
         }
-
     };
 
     const goHomeHandler = () => nav("/");
-
 
     return (
         <div className="flex flex-col w-fit bg-white text-center p-5 items-end relative">
@@ -84,8 +86,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         >
                             Client Name
                         </label>
-
-
                     </div>
 
                     <input
@@ -99,6 +99,9 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                             required: "Client name is required",
                         })}
                     />
+                    {errors.client_name && (
+                        <p className="err">{errors.client_name.message}</p>
+                    )}
                 </div>
                 <div className="flex gap-3">
                     <div className="flex flex-col">
@@ -109,6 +112,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         <select
                             id="status"
                             className="customInput customInput-select"
+                            defaultValue={invoice ? invoice.status : "Draft"}
                             {...register("status", {
                                 required: "Status is required",
                             })}
@@ -117,6 +121,9 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                             <option value="pending">Pending</option>
                             <option value="paid">Paid</option>
                         </select>
+                        {errors.status && (
+                            <p className="err">{errors.status.message}</p>
+                        )}
                     </div>
                     <div className="flex flex-col">
                         <label className="customInput-label" htmlFor="due_at">
@@ -129,11 +136,15 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                             className="customInput"
                             {...register("due_at", {
                                 required: "Due at is required",
+                                validate: validateYears,
                             })}
                         />
+                        {errors.due_at && (
+                            <p className="err">{errors.due_at.message}</p>
+                        )}
                     </div>
                 </div>
-                
+
                 <div className="flex flex-col">
                     <label className="customInput-label" htmlFor="amount">
                         Amount
@@ -144,8 +155,15 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         className="customInput"
                         {...register("amount", {
                             required: "Amount is required",
+                            min: {
+                                value: 0,
+                                message: "Amount must be positive",
+                            },
                         })}
                     />
+                    {errors.amount && (
+                        <p className="err">{errors.amount.message}</p>
+                    )}
                 </div>
                 <div className="flex justify-center gap-5">
                     <input
@@ -175,4 +193,15 @@ function getDateStr(dateTimestamp) {
     const year = date.getFullYear().toString();
 
     return year + "-" + month.padStart(2, "0") + "-" + day.padStart(2, "0");
+}
+
+function validateYears(value) {
+    if (value < "1990-01-01") {
+        return "Date must be after 1990-01-01";
+    }
+    if (value > "2099-12-31") {
+        return "Date must be before 2099-12-31";
+    }
+
+    return true;
 }

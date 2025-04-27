@@ -83,3 +83,7 @@
 .customBtn-exit-sm {
   @apply w-6 h-6 text-[12px];
 }
+
+.err{
+  @apply text-rose-500 italic text-sm;
+}
