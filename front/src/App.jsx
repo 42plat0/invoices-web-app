@@ -6,6 +6,7 @@ import Invoices from './Invoices'
 import InvoiceForm from './InvoiceForm'
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import NotFoundPage from "./NotFoundPage";
 import { ProtectedRoute } from './ProtectRoute';
 
 function App() {
@@ -62,6 +63,8 @@ function App() {
               <Route path="login" element={<LoginForm submitCompleted={handleSuccessfulRequest} /> }></Route>  
               <Route path="register" element={<RegisterForm submitCompleted={handleSuccessfulRequest} /> }></Route>  
           </Route>
+          {/* Catch-all route for 404 */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
     </>
   )

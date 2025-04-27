@@ -6,9 +6,9 @@ import { useState, useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
 
 export default function RegisterForm({ submitCompleted }) {
-    const { register, handleSubmit, setValue, reset } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [error, setError] = useState(null);
-    const {user, setUser} = useContext(UserContext);
+    const { setUser} = useContext(UserContext);
     const nav = useNavigate();
 
     const API_URL = import.meta.env.VITE_AUTH_API_URL;
@@ -21,10 +21,9 @@ export default function RegisterForm({ submitCompleted }) {
                 setUser(res.data.user);
                 submitCompleted();
                 goHomeHandler();
-                
             }
         } catch (error) {
-            setError(error);
+            setError(error.response.data.errors);
         }
     };
 
@@ -33,7 +32,7 @@ export default function RegisterForm({ submitCompleted }) {
 
     return (
         <div className="flex flex-col w-fit justify-center bg-white text-center p-5">
-            {error && <p>error</p>}
+            {error && <p className="err">{error}</p>}
             <form
                 className="flex flex-col text-2xl gap-3"
                 onSubmit={handleSubmit(sendForm)}
@@ -64,23 +63,31 @@ export default function RegisterForm({ submitCompleted }) {
                             required: "Username is required",
                         })}
                     />
+                    {errors.username && (
+                        <p className="err">{errors.username.message}</p>
+                    )}
                 </div>
+
+                <div className="flex flex-col">
+                    {/* Select */}
+                    <label htmlFor="email" className="customInput-label">
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        id="emailField"
+                        name="email"
+                        className="customInput customInput-select"
+                        {...register("email", {
+                            required: "Email is required",
+                        })}
+                    />
+                    {errors.email && (
+                        <p className="err">{errors.email.message}</p>
+                    )}
+                </div>
+
                 <div className="flex gap-3">
-                    <div className="flex flex-col">
-                        {/* Select */}
-                        <label htmlFor="email" className="customInput-label">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            id="emailField"
-                            name="email"
-                            className="customInput customInput-select"
-                            {...register("email", {
-                                required: "Email is required",
-                            })}
-                        />
-                    </div>
                     <div className="flex flex-col">
                         <label className="customInput-label" htmlFor="password">
                             Password
@@ -92,8 +99,10 @@ export default function RegisterForm({ submitCompleted }) {
                                 required: "Password is required",
                             })}
                         />
+                        {errors.password && (
+                            <p className="err">{errors.password.message}</p>
+                        )}
                     </div>
-                </div>
                 
                 <div className="flex flex-col">
                     <label className="customInput-label" htmlFor="conf_password">
@@ -106,7 +115,12 @@ export default function RegisterForm({ submitCompleted }) {
                             required: "Confirm Password is required",
                         })}
                     />
+                    {errors.conf_password && (
+                        <p className="err">{errors.conf_password.message}</p>
+                    )}
                 </div>
+                </div>
+
                 <div className="flex justify-center gap-5">
                     <input
                         type="submit"
@@ -118,15 +132,4 @@ export default function RegisterForm({ submitCompleted }) {
             </form>
         </div>
     );
-}
-
-// Inp: string
-function getDateStr(dateTimestamp) {
-    const date = new Date(dateTimestamp);
-
-    const day = date.getDate().toString();
-    const month = (date.getMonth() + 1).toString();
-    const year = date.getFullYear().toString();
-
-    return year + "-" + month.padStart(2, "0") + "-" + day.padStart(2, "0");
 }

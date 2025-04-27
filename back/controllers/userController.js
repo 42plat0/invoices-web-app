@@ -2,6 +2,9 @@ import express from "express";
 
 import { createUser, getUserById, getUserByUsername, getUsers } from "../models/userModel.js";
 import { hashPw, isCorrPw } from "../utils/hash.js";
+import { validate } from "../utils/validators/validate.js";
+import login from "../utils/validators/login.js";
+import register from "../utils/validators/register.js";
 
 import {
     getJWTToken,
@@ -14,7 +17,7 @@ import { allowedTo } from "../utils/validators/roleCheckMW.js";
 
 const userController = express.Router();
 
-userController.post("/login", async (req, res) => {
+userController.post("/login", login, validate, async (req, res) => {
     try {
         const user = req.body;
         const dbUser = await getUserByUsername(user);
@@ -42,7 +45,7 @@ userController.post("/login", async (req, res) => {
     }
 });
 
-userController.post("/register", async (req, res) => {
+userController.post("/register", register, validate, async (req, res) => {
     try {
         const user = req.body;
 

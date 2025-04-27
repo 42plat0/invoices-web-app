@@ -32,6 +32,14 @@ export const getUserById = async(id) => {
     return user;
 }
 
+export const getUserByEmail = async(email) => {
+    const [user] = await db`
+        SELECT id, username, role FROM users
+        WHERE email = ${email};  
+    `
+    return user;
+}
+
 export const getUsers = async() => 
     await db `SELECT id, username FROM users`
     

@@ -10,7 +10,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
     const {
         register,
         handleSubmit,
-        setValue,
         reset,
         formState: { errors },
     } = useForm({
@@ -46,8 +45,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                 goHomeHandler();
             }
         } catch (error) {
-            console.error(error);
-            setError(error);
+            setError(error.response.data.errors);
         }
     };
 
@@ -63,17 +61,17 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                 goHomeHandler();
             }
         } catch (error) {
-            setError(error);
+            setError(error.response.data.errors);
         }
     };
 
     const goHomeHandler = () => nav("/");
 
     return (
-        <div className="flex flex-col w-fit bg-white text-center p-5 items-end relative">
-            {error && <p>error</p>}
+        <div className="flex flex-col w-fit bg-white text-center p-5 relative">
+            {error && <p className="err">{error}</p>}
             <button
-                className="btn customBtn-exit customBtn-exit-sm absolute"
+                className="btn customBtn-exit customBtn-exit-sm absolute right-5"
                 onClick={goHomeHandler}
             >
                 ✕
@@ -115,14 +113,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                                 required: "User is required",
                             })}
                          }/>
-                        {/* <select
-                            id="user"
-                        >
-                            <option value="draft">...</option>
-                            {}
-                            <option value="pending">Pending</option>
-                            <option value="paid">Paid</option>
-                        </select> */}
     
                     </div>
 

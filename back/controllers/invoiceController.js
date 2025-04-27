@@ -10,6 +10,8 @@ import {
 import { protect } from "../utils/pathProtectMW.js";
 import { allowedTo } from "../utils/validators/roleCheckMW.js";
 import { getUserById } from "../models/userModel.js";
+import { validate } from "../utils/validators/validate.js";
+import createInvoice from "../utils/validators/createInvoice.js";
 
 const invoiceController = express.Router();
 
@@ -54,14 +56,11 @@ invoiceController.get("/:id", protect, allowedTo("admin", "user"), async (req, r
     }
 });
 
-invoiceController.post("/", protect, allowedTo("admin", "user"), async (req, res) => {
+invoiceController.post("/", protect, allowedTo("admin", "user"), createInvoice, validate, async (req, res) => {
     try {
         const invoice = req.body;
         invoice.user_id = !invoice.user_id ? req.user.id : parseInt(invoice.user_id);
-        console.log(invoice)
-
         const newinvoice = await insertInvoice(invoice);
-
 
         res.status(200).json({ status: "success", invoice: newinvoice });
     } catch (error) {
@@ -83,7 +82,7 @@ invoiceController.delete("/:id", protect, allowedTo("admin", "user"), async (req
     }
 });
 
-invoiceController.put("/:id", protect, allowedTo("admin", "user"), async (req, res) => {
+invoiceController.put("/:id", protect, allowedTo("admin", "user"), createInvoice, validate, async (req, res) => {
     try {
         const invoice = req.body,
             { id } = req.params;

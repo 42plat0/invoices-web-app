@@ -6,7 +6,7 @@ import { useState, useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
 
 export default function LoginForm({ submitCompleted }) {
-    const { register, handleSubmit, setValue, reset } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [ error, setError ] = useState(null);
     const { setUser } = useContext(UserContext);
     const nav = useNavigate();
@@ -26,7 +26,7 @@ export default function LoginForm({ submitCompleted }) {
                 
             }
         } catch (error) {
-            setError(error);
+            setError(error.response.data.errors);
         }
     };
 
@@ -36,7 +36,7 @@ export default function LoginForm({ submitCompleted }) {
 
     return (
         <div className="flex flex-col w-fit justify-center bg-white text-center p-5">
-            {error && <p>error</p>}
+            {error && <p className="err">{error}</p>}
             <form
                 className="flex flex-col text-2xl gap-3"
                 onSubmit={handleSubmit(sendForm)}
@@ -46,7 +46,7 @@ export default function LoginForm({ submitCompleted }) {
                     <div className="flex py-2 justify-between">
                         <label
                             className="customInput-label"
-                            htmlFor="client_name"
+                            htmlFor="username"
                         >
                             Username
                         </label>
@@ -68,6 +68,10 @@ export default function LoginForm({ submitCompleted }) {
                             required: "Username is required",
                         })}
                     />
+                    {errors.username && (
+                        <p className="err">{errors.username.message}</p>
+                    )}
+
                 </div>
                 
                 <div className="flex flex-col">
@@ -83,6 +87,9 @@ export default function LoginForm({ submitCompleted }) {
                             required: "Password is required",
                         })}
                     />
+                    {errors.password && (
+                        <p className="err">{errors.password.message}</p>
+                    )}
                 </div>
                 <div className="flex justify-center gap-5">
                     <button
@@ -93,15 +100,4 @@ export default function LoginForm({ submitCompleted }) {
             </form>
         </div>
     );
-}
-
-// Inp: string
-function getDateStr(dateTimestamp) {
-    const date = new Date(dateTimestamp);
-
-    const day = date.getDate().toString();
-    const month = (date.getMonth() + 1).toString();
-    const year = date.getFullYear().toString();
-
-    return year + "-" + month.padStart(2, "0") + "-" + day.padStart(2, "0");
 }
