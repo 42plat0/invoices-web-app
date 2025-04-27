@@ -25,10 +25,9 @@ DONE:
     ++++ [feat] craete invoice context
     ++++ [feat] Istrinus invoice turetu graziai atsinaujint puslapis. Reiskais, kad reikia tureti invoice'us kaip Contexta kuris kiekviena karta yra atnaujinamas, tada po deletiono rodytu nrml ir nereiketu cheatint su window.location.reload() :D
     ++++ [fix] update invoices after deletion (needs context probz, easier)
+    ++++ [fix] When first item is clicked, it goes down. Why? 
 
 ---------------------------------------------------------------------------
-
---notanymre[fix] When first item is clicked, it goes down. Why? 
 
 [feat] Panaikinti rodykles prei amount.
 
