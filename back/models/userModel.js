@@ -1,5 +1,4 @@
 import { db } from "../db.js";
-import { hashPw, isCorrPw } from "../utils/hash.js";
 
 export const createUser = async(user) => {
     
@@ -8,7 +7,7 @@ export const createUser = async(user) => {
     const [cUser] = await db `
         INSERT INTO users
         ${db(user, cols)}
-        RETURNING id, username, email;
+        RETURNING *;
     `
     return cUser;
 }

@@ -47,9 +47,11 @@ userController.post("/register", async (req, res) => {
         user.password_hash = await hashPw(user.password);
         const created = await createUser(user);
 
-        const token = getJWTToken(user.username);
+        const token = getJWTToken(created.id);
         addTokenToRes(token, res);
-        res.status(200).json({ status: "success", created });
+        delete(created.password);
+        delete(created.password_hash);
+        res.status(200).json({ status: "success", user: created });
     } catch (error) {
         console.error(error);
     }

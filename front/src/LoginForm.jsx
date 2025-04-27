@@ -31,6 +31,8 @@ export default function LoginForm({ submitCompleted }) {
     };
 
     const goHomeHandler = () => nav("/");
+    
+    const goRegisterHandler = () => nav("/auth/register");
 
     return (
         <div className="flex flex-col w-fit justify-center bg-white text-center p-5">
@@ -86,6 +88,7 @@ export default function LoginForm({ submitCompleted }) {
                     <button
                         className="btn btn-primary"
                     >Login</button>
+                    <button className="btn btn-secondary" onClick={goRegisterHandler}>Register</button>
                 </div>
             </form>
         </div>

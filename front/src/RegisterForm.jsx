@@ -2,23 +2,25 @@ import { useForm } from "react-hook-form";
 import "./static/app.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "./contexts/UserContext";
 
 export default function RegisterForm({ submitCompleted }) {
     const { register, handleSubmit, setValue, reset } = useForm();
     const [error, setError] = useState(null);
+    const {user, setUser} = useContext(UserContext);
     const nav = useNavigate();
 
     const API_URL = import.meta.env.VITE_AUTH_API_URL;
 
     const sendForm = async (data) => {
         try {
-            const res = await axios.post(`${API_URL}/register`, data);
+            const res = await axios.post(`${API_URL}/register`, data, {withCredentials: true});
 
             if (res.status === 200){
+                setUser(res.data.user);
                 submitCompleted();
                 goHomeHandler();
-                reset();
                 
             }
         } catch (error) {
@@ -27,6 +29,7 @@ export default function RegisterForm({ submitCompleted }) {
     };
 
     const goHomeHandler = () => nav("/");
+    const goLoginHandler = () => nav("/auth/login");
 
     return (
         <div className="flex flex-col w-fit justify-center bg-white text-center p-5">
@@ -110,6 +113,7 @@ export default function RegisterForm({ submitCompleted }) {
                         value="Register"
                         className="btn btn-primary"
                     />
+                    <button className="btn btn-secondary" onClick={goLoginHandler}>Login</button>
                 </div>
             </form>
         </div>
