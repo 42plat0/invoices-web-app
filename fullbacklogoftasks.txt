@@ -1,10 +1,6 @@
 ---------------------------------------------------------------------------
 CURRENT:
-    !#-->[fix] add login to register
-    #--> [fix] Yra prisijungimo UI, taciau nera validaciju, kad sutampa PW
-    #--> [feat, important] Admin: Can view and manage all users’ invoices. create roles
     #--> [feat] craete invoice context
-    #--> [feat, important, maybe use some lib] add validator
 
 DONE:
     ++++ Pakeisti client name value. Uzdeti placeholderi.
@@ -16,11 +12,17 @@ DONE:
     ++++ [fix] Invoice status'as visada nusidefaultina i "Draft" (editinant tsg pakeicia). ----??? Or something else... After clicking exit on invoice it saves the "Draft" option even though we don't press save.
     ++++ Invoice'ai neturi USERIU priskirtu
         // Reikai sukurti normalu mechanizma, kuriuo prisegamas userio id, tikrinami tokenai kiekviename requeste backui, vadinasi reikia middleware'o. Dabartiis sprendimas yra greitas ir nepalaikomas. Galim turet middleware kur prie jo prisegamas userio id, jei jau tai nera padaryta ir req body pridesim jy. Also, reikia ir parodyti tik tuos invoices, kurie yra userio.
+    ++++ [fix] add login to register
+    ++++ [fix] editininant forma visada gaunam draft, o ne turima statusa
+    ++++ [fix] editinant neateina esama data (due_at)
+    ++++ [fix] Gali ivesti minusini amounta, nice, kinda confusing tho.
+    ++++ [feat, important] Admin: Can view and manage all users’ invoices. create roles
+        // Create adding invoices to users 
+    ++++ [feat, important, maybe use some lib] add validator
+    ++++ [feat] Filter by is nto workign
 ---------------------------------------------------------------------------
 
-[fix] When first item is clicked, it goes down. Why?
-
-[feat] Filter by is nto workign
+--notanymre[fix] When first item is clicked, it goes down. Why? 
 
 [feat] There are no authentication UI. Questoinable workign authentiaction, needs testing.
 
@@ -30,18 +32,18 @@ DONE:
 
 [feat] Modularize if enough time.
 
-[fix] Gali ivesti minusini amounta, nice, kinda confusing tho.
-
 [feat] Add axios interceptor and remove visur withCredentials: true
 
 [feat] Istrinus invoice turetu graziai atsinaujint puslapis. Reiskais, kad reikia tureti invoice'us kaip Contexta kuris kiekviena karta yra atnaujinamas, tada po deletiono rodytu nrml ir nereiketu cheatint su window.location.reload() :D
+[fix] update invoices after deletion (needs context probz, easier)
+    // Probable fix is just set invoices without deleted invoice with filter 
 
 [feat] pagination
-
-[fix] editininant forma visada gaunam draft, o ne turima statusa
-
-[fix] editinant neateina esama data (due_at)
 
 [feat] update user
 
 [fix] add not found page -> redirect
+
+[fix] Yra prisijungimo UI, taciau nera validaciju, kad sutampa PW
+
+[feat] admin create users

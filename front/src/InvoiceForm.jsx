@@ -26,8 +26,6 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
     const sendForm = async (data) => {
         try {
             let res;
-            console.log(userId)
-            console.log(data)
             
             if (invoice) {
                 res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data, {
@@ -96,7 +94,7 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                         defaultValue={invoice ? invoice.client_name : ""}
                         placeholder="..."
                         id="clientNameField"
-                        disabled={invoice ? true : ""}
+                        disabled={invoice && user.role !== "admin" ? true : ""}
                         className="customInput"
                         {...register("client_name", {
                             required: "Client name is required",

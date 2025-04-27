@@ -14,7 +14,6 @@ const UserSelector = ({ onSelectUser, defaultValue, register}) => {
                 const res = await axios.get(`${API_URL}/all`, {
                     withCredentials: true,
                 });
-                console.log(res)
                 setUsers(res.data.users);
             } catch (err) {
                 setError(err.message);

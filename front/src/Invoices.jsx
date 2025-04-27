@@ -7,6 +7,7 @@ import axios from "axios";
 export default function Invoices({ invoices, setInvoice }) {
     // Add error handling
     const [error, setError] = useState(null);
+    const [filterStatus, setFilterStatus] = useState("all");
     const invoiceList = invoices;
     const { user, setUser, loading } = useContext(UserContext);
 
@@ -17,22 +18,6 @@ export default function Invoices({ invoices, setInvoice }) {
     const handleNewInvoiceClick = () => {
         try {
             nav("/invoice/add");
-        } catch (error) {
-            setError(error);
-        }
-    };
-
-    const handleUserLogin = () => {
-        try {
-            nav("/auth/login");
-        } catch (error) {
-            setError(error);
-        }
-    };
-
-    const handleUserRegister = () => {
-        try {
-            nav("/auth/register");
         } catch (error) {
             setError(error);
         }
@@ -55,14 +40,23 @@ export default function Invoices({ invoices, setInvoice }) {
                 nav("/");
             }
         } catch (error) {
-            console.error(error);
-            setError(error);
+            setError(error.response.data.errors);
         }
     };
+
+    // Filter invoices based on the selected status
+    const filteredInvoices = invoiceList?.filter((invoice) =>{
+        if (filterStatus === "all"){
+            return invoice;
+        }
+        return  invoice.status === filterStatus.toLowerCase();
+    }
+    );
 
     return (
         !loading && (
             <main className="w-screen h-screen flex gap-10">
+                {error && <p className="err">{error}</p>}
                 <div className="flex flex-col gap-5 justify-end items-center border-e border-red-300">
                     <p className="text-white uppercase">{user.username}</p>
                     <button
@@ -86,11 +80,18 @@ export default function Invoices({ invoices, setInvoice }) {
                             </p>
                         </div>
                         <div className="flex items-center">
-                            <div>
+                            <div className="px-3">
                                 Filter by
-                                <select>
-                                    <option value="status">status</option>
-                                    <option value="status">draft</option>
+                                <select
+                                    onChange={(e) => {
+                                        setFilterStatus(e.target.value)
+                                    }} 
+                                    className="ml-2 rounded bg-gray-800 p-2 text-white"
+                                >
+                                    <option value="all">All</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="paid">Paid</option>
                                 </select>
                             </div>
                             {/* TODO change to module button downloaded from internet */}
@@ -108,8 +109,8 @@ export default function Invoices({ invoices, setInvoice }) {
                     <div>
                         <Invoice example={true} />
                         {!loading &&
-                            invoiceList &&
-                            invoiceList.map((i, { idx }) => (
+                            filteredInvoices &&
+                            filteredInvoices.map((i, { idx }) => (
                                 <Invoice
                                     invoice={i}
                                     key={idx}
