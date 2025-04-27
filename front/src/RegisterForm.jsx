@@ -4,11 +4,13 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
+import { InvoiceContext } from "./contexts/InvoiceContext";
 
 export default function RegisterForm({ submitCompleted }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [error, setError] = useState(null);
     const { setUser} = useContext(UserContext);
+    const {fetchInvoices} = useContext(InvoiceContext);
     const nav = useNavigate();
 
     const API_URL = import.meta.env.VITE_AUTH_API_URL;
@@ -16,12 +18,10 @@ export default function RegisterForm({ submitCompleted }) {
     const sendForm = async (data) => {
         try {
             const res = await axios.post(`${API_URL}/register`, data, {withCredentials: true});
-
-            if (res.status === 200){
-                setUser(res.data.user);
-                submitCompleted();
-                goHomeHandler();
-            }
+            setUser(res.data.user);
+            await fetchInvoices();
+            submitCompleted();
+            goHomeHandler();
         } catch (error) {
             setError(error.response.data.errors);
         }

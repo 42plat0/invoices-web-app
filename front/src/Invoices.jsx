@@ -3,12 +3,13 @@ import { UserContext } from "./contexts/UserContext";
 import { useNavigate } from "react-router";
 import Invoice from "./Invoice";
 import axios from "axios";
+import { InvoiceContext } from "./contexts/InvoiceContext";
 
-export default function Invoices({ invoices, setInvoice }) {
+export default function Invoices() {
     // Add error handling
     const [error, setError] = useState(null);
     const [filterStatus, setFilterStatus] = useState("all");
-    const invoiceList = invoices;
+    const {invoices, loading:invLoading, setSelectedInvoice} = useContext(InvoiceContext);
     const { user, setUser, loading } = useContext(UserContext);
 
     const nav = useNavigate();
@@ -19,7 +20,7 @@ export default function Invoices({ invoices, setInvoice }) {
         try {
             nav("/invoice/add");
         } catch (error) {
-            setError(error);
+            setError(error.response.data.errors);
         }
     };
 
@@ -45,7 +46,7 @@ export default function Invoices({ invoices, setInvoice }) {
     };
 
     // Filter invoices based on the selected status
-    const filteredInvoices = invoiceList?.filter((invoice) =>{
+    const filteredInvoices = invoices?.filter((invoice) =>{
         if (filterStatus === "all"){
             return invoice;
         }
@@ -54,11 +55,11 @@ export default function Invoices({ invoices, setInvoice }) {
     );
 
     return (
-        !loading && (
+        !loading && !invLoading && (
             <main className="w-screen h-screen flex gap-10">
                 {error && <p className="err">{error}</p>}
-                <div className="flex flex-col gap-5 justify-end items-center border-e border-red-300">
-                    <p className="text-white uppercase">{user.username}</p>
+                <div className="flex flex-col gap-5 justify-end items-center border-e border-red-300 p-3">
+                    <p className="text-white uppercase font-semibold">{user.username}</p>
                     <button
                         className="btn btn-auth"
                         onClick={handleUserLogout}
@@ -74,8 +75,8 @@ export default function Invoices({ invoices, setInvoice }) {
                             </h1>
                             <p>
                                 There are
-                                {invoiceList &&
-                                    ` ${invoiceList.length} total`}{" "}
+                                {invoices &&
+                                    ` ${invoices.length} total`}{" "}
                                 invoices
                             </p>
                         </div>
@@ -108,13 +109,12 @@ export default function Invoices({ invoices, setInvoice }) {
                     </nav>
                     <div>
                         <Invoice example={true} />
-                        {!loading &&
+                        {!loading && !invLoading &&
                             filteredInvoices &&
                             filteredInvoices.map((i, { idx }) => (
                                 <Invoice
                                     invoice={i}
                                     key={idx}
-                                    setInvoice={setInvoice}
                                 />
                             ))}
                     </div>

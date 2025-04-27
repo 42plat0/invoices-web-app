@@ -5,8 +5,17 @@ import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
 import UserSelector from "./UserSelector";
 import { UserContext } from "./contexts/UserContext";
+import { InvoiceContext } from "./contexts/InvoiceContext";
 
-export default function InvoiceForm({ invoice, submitCompleted }) {
+export default function InvoiceForm({ submitCompleted }) {
+    const [error, setError] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const {user} = useContext(UserContext);
+    const {addInvoice, deleteInvoice:delInv, updateInvoice, selectedInvoice, setSelectedInvoice, fetchInvoices} = useContext(InvoiceContext);
+    const invoice = selectedInvoice;
+    const nav = useNavigate();
+
+    
     const {
         register,
         handleSubmit,
@@ -17,31 +26,15 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
             due_at: invoice?.due_at ? getDateStr(invoice.due_at) : "",
         },
     });
-    const [error, setError] = useState(null);
-    const [userId, setUserId] = useState(null);
-    const {user} = useContext(UserContext);
-    const nav = useNavigate();
-    const apiInvoiceUrl = import.meta.env.VITE_API_URL;
 
     const sendForm = async (data) => {
         try {
-            let res;
-            
-            if (invoice) {
-                res = await axios.put(apiInvoiceUrl + "/" + invoice.id, data, {
-                    withCredentials: true,
-                });
-            } else {
-                res = await axios.post(apiInvoiceUrl, data, {
-                    withCredentials: true,
-                });
-            }
-
-            if (res.status === 200) {
-                submitCompleted();
-                reset();
-                goHomeHandler();
-            }
+            setError(null);
+            invoice ? await updateInvoice(invoice.id, data) : await addInvoice(data);
+            submitCompleted();
+            await fetchInvoices();
+            reset();
+            goHomeHandler();
         } catch (error) {
             setError(error.response.data.errors);
         }
@@ -49,21 +42,18 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
 
     const deleteInvoice = async (data) => {
         try {
-            const res = await axios.delete(apiInvoiceUrl + "/" + invoice.id, {
-                withCredentials: true,
-            });
-
-            if (res.status === 200) {
-                submitCompleted();
-                reset();
-                goHomeHandler();
-            }
+            await delInv(invoice.id)
+            submitCompleted();
+            reset();
+            goHomeHandler();
         } catch (error) {
             setError(error.response.data.errors);
         }
     };
 
-    const goHomeHandler = () => nav("/");
+    const goHomeHandler = () => {setSelectedInvoice(null); nav("/")};
+
+    if (!user) {nav("/"); return null};
 
     return (
         <div className="flex flex-col w-fit bg-white text-center p-5 relative">
@@ -111,6 +101,9 @@ export default function InvoiceForm({ invoice, submitCompleted }) {
                                 required: "User is required",
                             })}
                          }/>
+                        {errors.user_id && (
+                            <p className="err">{errors.user_id.message}</p>
+                        )}
     
                     </div>
 

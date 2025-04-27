@@ -3,11 +3,12 @@ import "./static/Invoice.css";
 import { useNavigate } from 'react-router';
 import { useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
+import { InvoiceContext } from "./contexts/InvoiceContext";
 
-export default function Invoice({invoice, setInvoice, example=false}){
+export default function Invoice({invoice, example=false}){
 
     const { user } = useContext(UserContext);
-
+    const { selectedInvoice, setSelectedInvoice} = useContext(InvoiceContext);
     if (example){
         return( 
             <div className="invoice-header">
@@ -16,19 +17,17 @@ export default function Invoice({invoice, setInvoice, example=false}){
                 <p className="invoice-header-item">Client name</p>
                 <p className="invoice-header-item">Amount</p>
                 {user.role === "admin" && <p className="invoice-header-item">Owner</p>}
-                {/* TODO add key */}
                 <p className="invoice-header-item">Status</p>
             </div>
         )
     }
 
-    // TODO check invoice object
-    const {id, due_at, client_name, amount, status, owner} = invoice;
+    const {id, due_at, client_name, amount, status, owner} = selectedInvoice || invoice;
     const nav = useNavigate();
 
     const handleBadgeClick = () => {
         if (id){
-            setInvoice(invoice);
+            setSelectedInvoice(invoice);
             nav(`/invoice`);
         }
         // TODO add err handling

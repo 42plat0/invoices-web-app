@@ -4,11 +4,13 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { useState, useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
+import { InvoiceContext } from "./contexts/InvoiceContext";
 
 export default function LoginForm({ submitCompleted }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [ error, setError ] = useState(null);
     const { setUser } = useContext(UserContext);
+    const {fetchInvoices} = useContext(InvoiceContext);
     const nav = useNavigate();
     
     const API_URL = import.meta.env.VITE_AUTH_API_URL;
@@ -21,6 +23,7 @@ export default function LoginForm({ submitCompleted }) {
 
             if (res.status === 200){
                 setUser(res.data.user);
+                await fetchInvoices();
                 submitCompleted();
                 goHomeHandler();
                 

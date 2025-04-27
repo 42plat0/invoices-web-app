@@ -15,35 +15,14 @@ function App() {
     const [invoice, setInvoice] = useState(null);
     const [isReqOk, setIsReqOk] = useState(false);
 
-    useEffect(() => {
-        const getInvoices = async() => {
-          try {
-            const invoices = await axios.get(import.meta.env.VITE_API_URL, {withCredentials:true});
-            setInvoices(invoices.data.invoices);
-          } catch (error) {
-            console.error(error)
-          }
-        }
-        getInvoices();
-    }, [isReqOk])
-
     const handleSuccessfulRequest = () => setIsReqOk(prev => !prev);
-
-    // Simple check if its correct
-    // useEffect(() => {
-      /*
-        If there is no invoice, add error, dont navigate. maybbe do from controller, where i check id before redirectin
-        Better idea to make new page for errors 
-      */
-
-    // }, [invoice]);
 
   return (
     <> 
         <Routes>
           <Route index element={
               <ProtectedRoute>
-                <Invoices invoices={invoices} setInvoice={setInvoice}/>
+                <Invoices/>
               </ProtectedRoute>
             }>
             </Route>
